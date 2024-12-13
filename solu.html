@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Meta Tags -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Our Solutions</title>
+		<!-- FONT -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Delius&family=Gowun+Batang:wght@400;700&family=Halant:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playwrite+DE+Grund:wght@100..400&display=swap" rel="stylesheet" />
+		<!-- CSS -->
+		<link rel="stylesheet" href="solu.css" />
+		<!-- ICON -->
+		<script src="https://kit.fontawesome.com/8d96be3df1.js" crossorigin="anonymous"></script>
+	</head>
+	<body class="day-theme">
+		<nav id="navbar2">
+			<div class="nav-content">
+				<div class="logo headerNav">
+					<a href="index.html" target="_self">
+						<img src="gambar/logoRPlasticle.png" alt="Logo" />
+					</a>
+				</div>
+				<ul class="nav-links" id="nav-links">
+					<li><a href="index.html#home">Kembali</a></li>
+					<li>
+						<!-- Dark Mode Toggle -->
+						<button id="theme-toggle" class="theme-toggle">
+							<span class="sun-icon">☀️</span>
+							<span class="moon-icon">🌙</span>
+						</button>
+					</li>
+				</ul>
+				<div class="hamburger" id="hamburger" aria-label="Hamburger Menu">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</nav>
+
+		<div id="modal-overlay" class="modal-overlay"></div>
+
+		<!-- Add just one modal template that will be reused -->
+		<div id="modal-template" class="modal" style="display: none">
+			<div class="modal-content">
+				<button class="close-modal">&times;</button>
+				<div class="modal-image-container">
+					<img class="modal-image" alt="" />
+					<div class="modal-image-overlay"></div>
+					<div class="modal-header">
+						<h3></h3>
+					</div>
+				</div>
+				<p></p>
+			</div>
+		</div>
+
+		<!-- Solutions Section -->
+		<section class="sol-page-section">
+			<div class="sol-page-header">
+				<h2 class="sAnimated">Our Solutions</h2>
+				<p>Temuilah solusi inovatif yang disesuaikan khusus<br>untuk memenuhi kebutuhan Anda.</p>
+			</div>
+
+			<!-- Cards Container -->
+			<div id="cards-container" class="sol-page-kartu-con"></div>
+
+			<!-- Pagination Controls -->
+			<div class="pagination">
+				<button id="prev-btn" class="pagination-btn" onclick="prevPage()">Previous</button>
+				<div id="page-selectors" class="page-selectors"></div>
+				<button id="next-btn" class="pagination-btn" onclick="nextPage()">Next</button>
+			</div>
+		</section>
+
+		<script src="script.js"></script>
+		<script>
+			// Data for all the cards
+			const cardsData = [
+				{
+					id: "modal1",
+					title: "Kurangi Penggunaan Plastik Sekali Pakai",
+					description: "Langkah sederhana namun berdampak besar untuk mengurangi sampah plastik. Mulai dengan menolak penggunaan kantong plastik, sedotan, dan wadah makanan sekali pakai.",
+					modalContent: "Pengurangan plastik sekali pakai adalah langkah penting dalam memerangi polusi plastik. Anda dapat memulai dengan: 1) Membawa tas belanja sendiri, 2) Menggunakan botol minum isi ulang, 3) Menolak sedotan plastik, 4) Memilih produk dengan kemasan minimal atau dapat diisi ulang. Perubahan kecil ini, jika dilakukan secara konsisten, dapat mengurangi jumlah sampah plastik secara signifikan.",
+					imageUrl: "gambar/solu/10613101_10088.jpg",
+				},
+				{
+					id: "modal2",
+					title: "Reuse (Gunakan Kembali)",
+						description: "Maksimalkan penggunaan barang-barang plastik yang sudah ada dengan menggunakannya kembali untuk berbagai keperluan sebelum akhirnya dibuang.",
+						modalContent: "Menggunakan kembali produk plastik dapat memperpanjang masa pakainya dan mengurangi kebutuhan plastik baru. Beberapa cara efektif untuk reuse: 1) Gunakan kembali wadah plastik untuk menyimpan makanan, 2) Manfaatkan kantong plastik bekas untuk sampah, 3) Kreasikan botol plastik menjadi pot tanaman, 4) Gunakan ember bekas untuk keperluan kebersihan. Pastikan plastik yang digunakan kembali dalam kondisi baik dan aman.",
+						imageUrl: "gambar/solu/23845175_6859743.jpg",
+				},
+				{
+					id: "modal3",
+					title: "Repair (Perbaiki)",
+					description: "Perbaiki barang-barang plastik yang rusak alih-alih langsung membuangnya, membantu mengurangi pembelian produk baru dan memperpanjang masa pakai.",
+					modalContent: "Memperbaiki barang plastik yang rusak dapat menghemat uang dan mengurangi limbah. Tips memperbaiki: 1) Gunakan lem khusus plastik untuk retakan, 2) Perbaiki tutup wadah yang rusak, 3) Rawat peralatan plastik secara berkala, 4) Pelajari teknik dasar perbaikan plastik. Pastikan perbaikan dilakukan dengan aman dan produk masih layak pakai.",
+					imageUrl: "gambar/solu/10613101_10088.jpg",
+				},
+				{
+					id: "modal4",
+					title: "Gunakan Bahan Alternatif",
+					description: "Beralih ke bahan ramah lingkungan seperti bambu, kaca, stainless steel, atau bahan biodegradable lainnya sebagai pengganti plastik.",
+					modalContent: "Banyak alternatif ramah lingkungan yang bisa menggantikan plastik: 1) Wadah makanan dari kaca atau stainless steel, 2) Peralatan makan dari bambu, 3) Kantong belanja dari kain, 4) Kemasan makanan dari daun atau kertas, 5) Produk biodegradable untuk keperluan sehari-hari. Pilihan ini lebih tahan lama dan tidak mencemari lingkungan.",
+					imageUrl: "gambar/solu/14739227_1907.i305.016_pollution ecological garbage illustration.jpg",
+				},
+				{
+					id: "modal5",
+					title: "Menggunakan wadah makanan reuseable",
+					description: "Investasi dalam wadah makanan berkualitas yang bisa digunakan berulang kali untuk membawa bekal atau menyimpan makanan.",
+					modalContent: "Wadah makanan reusable memberikan banyak manfaat: 1) Lebih hemat jangka panjang, 2) Menjaga makanan tetap segar lebih lama, 3) Aman untuk microwave dan freezer, 4) Mengurangi sampah kemasan sekali pakai, 5) Tersedia dalam berbagai ukuran untuk berbagai keperluan. Pilih kualitas baik agar tahan lama.",
+					imageUrl: "gambar/solu/21095243_6393970.jpg",
+				},
+				{
+					id: "modal6",
+					title: "Menggunakan Tote bag",
+						description: "Ganti kantong plastik dengan tas belanja kain yang stylish, kuat, dan bisa dipakai berkali-kali untuk berbagai keperluan.",
+						modalContent: "Tote bag adalah solusi praktis dan ramah lingkungan: 1) Dapat menampung lebih banyak barang, 2) Lebih kuat dari kantong plastik, 3) Mudah dicuci dan dirawat, 4) Tersedia dalam berbagai desain menarik, 5) Bisa dilipat dan dibawa kemana-mana. Satu tote bag bisa menggantikan ratusan kantong plastik sekali pakai.",
+						imageUrl: "gambar/solu/7912025_3800858.jpg",
+				},
+				{
+					id: "modal7",
+					title: "Kurangi membeli makanan berwadah plastik",
+					description: "Pilih makanan atau produk yang dikemas dengan penggunaan plastik yang minimal, dan bawa wadah sendiri saat berbelanja atau membeli makanan.",
+					modalContent: "Tips mengurangi kemasan plastik makanan: 1) Beli bahan makanan segar dari pasar tradisional, 2) Pilih toko yang menerima wadah pribadi, 3) Beli dalam ukuran lebih besar untuk mengurangi kemasan, 4) Masak sendiri alih-alih membeli makanan kemasan, 5) Dukung penjual yang menggunakan kemasan ramah lingkungan.",
+					imageUrl: "gambar/solu/6716820_3360563.jpg",
+				},
+				{
+					id: "modal8",
+					title: "Penggunaan plastik biodegradable",
+					description: "Pilih produk dengan plastik biodegradable yang dapat terurai secara alami ketika penggunaan plastik tidak dapat dihindari.",
+					modalContent: "Plastik biodegradable menawarkan alternatif lebih ramah lingkungan: 1) Terurai dalam waktu lebih singkat, 2) Terbuat dari bahan alami seperti singkong atau jagung, 3) Menghasilkan lebih sedikit residu berbahaya, 4) Ideal untuk kemasan makanan dan kantong sampah, 5) Mendukung industri berkelanjutan.",
+					imageUrl: "gambar/solu/10780670_19198630.jpg",
+				},
+				{
+					id: "modal9",
+					title: "Ikut dalam organisasi kebersihan",
+					description: "Bergabung dengan komunitas peduli lingkungan untuk berkontribusi dalam aksi nyata mengurangi sampah plastik.",
+					modalContent: "Manfaat bergabung dengan organisasi kebersihan: 1) Berkontribusi langsung dalam aksi pembersihan lingkungan, 2) Belajar praktik pengelolaan sampah yang benar, 3) Membangun kesadaran komunitas, 4) Networking dengan sesama pegiat lingkungan, 5) Mengembangkan proyek-proyek ramah lingkungan bersama.",
+					imageUrl: "gambar/solu/21095241_6394393.jpg",
+				},
+				{
+					id: "modal10",
+					title: "Memilah sampah sendiri",
+					description: "Praktikkan pemilahan sampah di rumah untuk memudahkan proses daur ulang dan pengolahan sampah yang tepat.",
+					modalContent: "Panduan memilah sampah efektif: 1) Pisahkan organik dan anorganik, 2) Kelompokkan plastik berdasarkan jenisnya, 3) Bersihkan sampah yang akan didaur ulang, 4) Sediakan tempat sampah terpisah, 5) Edukasi anggota keluarga tentang pemilahan sampah. Pemilahan yang benar meningkatkan efektivitas daur ulang.",
+					imageUrl: "gambar/solu/13766133_5356723.jpg",
+				},
+				{
+					id: "modal11",
+					title: "Membuang sampah pada tempatnya",
+					description: "Biasakan membuang sampah dengan benar dan mendorong orang lain untuk melakukan hal yang sama.",
+					modalContent: "Pentingnya membuang sampah dengan benar: 1) Mencegah pencemaran lingkungan, 2) Memudahkan proses pengolahan sampah, 3) Menghindari banjir dan masalah drainase, 4) Menjaga kebersihan dan kesehatan lingkungan, 5) Memberikan contoh baik bagi masyarakat. Mulai dari hal kecil untuk perubahan besar.",
+					imageUrl: "gambar/solu/11235465_10706.jpg",
+				},
+				{
+					id: "modal12",
+					title: "Membiasakan penggunaan botol minum sendiri",
+					description: "Bawa botol minum pribadi untuk mengurangi pembelian minuman dalam kemasan plastik sekali pakai.",
+					modalContent: "Keuntungan menggunakan botol minum pribadi: 1) Menghemat uang jangka panjang, 2) Mengurangi sampah botol plastik, 3) Menjaga minuman tetap dingin/panas lebih lama, 4) Lebih higienis dan sehat, 5) Tersedia dalam berbagai pilihan desain dan kapasitas. Investasi kecil untuk dampak besar.",
+					imageUrl: "gambar/solu/freepik__expand__91718.png",
+				},
+				{
+					id: "modal13",
+					title: "Tidak meminta alat makan(utensils) plastik",
+					description: "Bawa peralatan makan sendiri atau tolak alat makan plastik saat memesan makanan untuk dibawa pulang.",
+					modalContent: "Cara menghindari penggunaan alat makan plastik: 1) Siapkan set alat makan pribadi di tas, 2) Informasikan ke penjual untuk tidak menyertakan alat makan plastik, 3) Gunakan alat makan stainless steel yang tahan lama, 4) Pilih restoran yang menggunakan alat makan ramah lingkungan, 5) Ajak teman dan keluarga untuk melakukan hal yang sama.",
+					imageUrl: "gambar/solu/rb_2149201656.png",
+				},
+				{
+					id: "modal14",
+					title: "Menggunakan plastik sebagai bahan DIY",
+					description: "Manfaatkan sampah plastik menjadi kreasi bermanfaat melalui proyek DIY yang kreatif dan inovatif.",
+					modalContent: "Ide kreatif daur ulang plastik: 1) Membuat pot tanaman dari botol bekas, 2) Kreasi tas dari bungkus plastik, 3) Membuat hiasan rumah dari tutup botol, 4) Mengolah plastik menjadi eco-brick, 5) Membuat organizer dari wadah plastik bekas. Ubah sampah menjadi karya seni bernilai.",
+					imageUrl: "gambar/solu/JW-Mario.jpg",
+				}
+			];
+
+			// Pagination
+			let currentPage = 1;
+			const cardsPerPage = 6;
+			let totalPages = Math.ceil(cardsData.length / cardsPerPage);
+
+			// Add these functions for managing pagination state
+			function saveCurrentPage() {
+				localStorage.setItem('currentPage', currentPage);
+			}
+
+			function loadSavedPage() {
+				const savedPage = localStorage.getItem('currentPage');
+				return savedPage ? parseInt(savedPage) : 1;
+			}
+
+			function displayCards() {
+				const cardsContainer = document.getElementById("cards-container");
+				const oldCards = cardsContainer.querySelectorAll(".sol-page-kartu");
+
+				oldCards.forEach((card, index) => {
+					setTimeout(() => {
+						card.classList.add("fade-out");
+					}, index * 50);
+				});
+
+				setTimeout(() => {
+					cardsContainer.innerHTML = "";
+
+					const startIndex = (currentPage - 1) * cardsPerPage;
+					const endIndex = Math.min(startIndex + cardsPerPage, cardsData.length);
+					const currentCards = cardsData.slice(startIndex, endIndex);
+
+					currentCards.forEach((card, index) => {
+						const cardElement = document.createElement("div");
+						cardElement.className = "sol-page-kartu fade-out";
+						cardElement.innerHTML = `
+                            <div class="sol-page-kartu-content">
+                                <h3>${card.title}</h3>
+                                <p>${card.description}</p>
+                                <button class="sol-page-kartu-cta" onclick="openModal('${card.id}')">Learn More</button>
+                            </div>
+                        `;
+						cardsContainer.appendChild(cardElement);
+
+						setTimeout(() => {
+							cardElement.classList.remove("fade-out");
+							cardElement.classList.add("fade-in");
+						}, index * 100);
+					});
+
+					updatePagination();
+					saveCurrentPage(); // Save the current page after displaying cards
+				}, 500);
+			}
+
+			function updatePagination() {
+				const pageSelectors = document.getElementById("page-selectors");
+				pageSelectors.innerHTML = ""; // Clear existing page selectors
+
+				for (let i = 1; i <= totalPages; i++) {
+					const pageBtn = document.createElement("button");
+					pageBtn.className = "page-btn";
+					if (i === currentPage) {
+						pageBtn.classList.add("active");
+					}
+					pageBtn.textContent = i;
+					pageBtn.addEventListener("click", () => {
+						currentPage = i;
+						displayCards();
+						saveCurrentPage(); // Save the current page when clicking pagination buttons
+					});
+					pageSelectors.appendChild(pageBtn);
+				}
+
+				document.getElementById("prev-btn").disabled = currentPage === 1;
+				document.getElementById("next-btn").disabled = currentPage === totalPages;
+			}
+
+			function prevPage() {
+				if (currentPage > 1) {
+					currentPage--;
+					displayCards();
+					saveCurrentPage();
+				}
+			}
+
+			function nextPage() {
+				if (currentPage < totalPages) {
+					currentPage++;
+					displayCards();
+					saveCurrentPage();
+				}
+			}
+
+			document.addEventListener("DOMContentLoaded", () => {
+				totalPages = Math.ceil(cardsData.length / cardsPerPage);
+				currentPage = loadSavedPage(); // Load the saved page
+				displayCards();
+			});
+
+			function createModal(cardData) {
+				const modalTemplate = document.getElementById("modal-template");
+				const modal = modalTemplate.cloneNode(true);
+
+				modal.id = cardData.id;
+				modal.querySelector(".modal-image").src = cardData.imageUrl;
+				modal.querySelector(".modal-image").alt = cardData.title;
+				modal.querySelector(".modal-header h3").textContent = cardData.title;
+				modal.querySelector(".modal-content p").textContent = cardData.modalContent;
+
+				// Add event listener to close button
+				modal.querySelector(".close-modal").addEventListener("click", () => closeModal(cardData.id));
+
+				return modal;
+			}
+
+			function openModal(modalId) {
+				const cardData = cardsData.find((card) => card.id === modalId);
+				if (!cardData) return;
+
+				// Check if modal already exists
+				let modal = document.getElementById(modalId);
+				if (!modal) {
+					// Create new modal if it doesn't exist
+					modal = createModal(cardData);
+					document.body.appendChild(modal);
+				}
+
+				const overlay = document.getElementById("modal-overlay");
+
+				modal.style.display = "block";
+				overlay.style.display = "block";
+
+				setTimeout(() => {
+					modal.classList.add("show");
+					overlay.classList.add("show");
+				}, 10);
+
+				document.body.classList.add("modal-open");
+			}
+
+			function closeModal(modalId) {
+				const modal = document.getElementById(modalId);
+				const overlay = document.getElementById("modal-overlay");
+
+				if (!modal) return;
+
+				modal.classList.remove("show");
+				overlay.classList.remove("show");
+
+				setTimeout(() => {
+					modal.style.display = "none";
+					overlay.style.display = "none";
+					document.body.classList.remove("modal-open");
+
+					// Optionally remove the modal from DOM to save memory
+					// modal.remove();
+				}, 300);
+			}
+
+			document.getElementById("modal-overlay").addEventListener("click", function () {
+				const openModal = document.querySelector(".modal.show");
+				if (openModal) {
+					closeModal(openModal.id);
+				}
+			});
+
+			document.addEventListener("keydown", function (event) {
+				if (event.key === "Escape") {
+					const openModal = document.querySelector(".modal.show");
+					if (openModal) {
+						closeModal(openModal.id);
+					}
+				}
+			});
+
+			document.querySelectorAll("a").forEach((link) => {
+				link.addEventListener("click", function (event) {
+					event.preventDefault();
+					const href = this.href;
+
+					document.body.classList.add("fade-out");
+
+					setTimeout(() => {
+						window.location.href = href;
+					}, 500);
+				});
+			});
+
+			function toggleMode() {
+				const body = document.body;
+				if (body.classList.contains("light-mode")) {
+					body.classList.remove("light-mode");
+					body.classList.add("dark-mode");
+				} else {
+					body.classList.remove("dark-mode");
+					body.classList.add("light-mode");
+				}
+			}
+
+			document.getElementById("mode-toggle-btn").addEventListener("click", toggleMode);
+		</script>
+	</body>
+</html>
