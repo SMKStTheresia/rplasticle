@@ -514,8 +514,9 @@ a {
 
 .title {
     font-size: clamp(3rem, 8vw, 5rem);
-    font-weight: bold;
-    background: linear-gradient(90deg, black, #09381c, #105f31, #167c46, #058ded);
+    font-family: "Poppins", serif;
+    font-weight: 900;
+    background: linear-gradient(90deg, #03b51d, #009721, #006528, #019717, #006015);
     background-size: 300% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -626,7 +627,7 @@ a {
 /* Trash elements */
 .trash-container {
     position: absolute;
-    bottom: 100px;
+    bottom: 80px;
     left: 0;
     width: 100%;
     height: 200px;
@@ -654,8 +655,8 @@ a {
 }
 
 .trash img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     transition: transform 0.3s ease;
 }
 
@@ -755,7 +756,8 @@ a {
 .header-l1 {
     text-align: center;
     margin-bottom: 40px;
-    font-size: 36px;
+    font-size: 3rem;
+    font-weight: bold;
     background: linear-gradient(to bottom, var(--logo1), var(--logo2), var(--logo3), var(--logo4));
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -784,34 +786,31 @@ a {
 }
 
 .hl1 {
-    font-size: 5rem;
+    font-size: 4rem;
     transition: color var(--transition-speed) ease;
     background: linear-gradient(to bottom, var(--logo1), var(--logo2), var(--color-primary));
     background-clip: text;
     -webkit-text-fill-color: transparent;
     transform: translateX(-2.5rem);
+    font-weight: bold;
 }
 
 .hl2 {
-    font-size: 5rem;
-    transform: translateX(2.5rem);
+    font-size: 4rem;
+    transform: translateX(3rem);
     transition: color var(--transition-speed) ease;
     background: linear-gradient(to bottom, var(--logo1), var(--logo2), var(--logo3), var(--logo4));
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-weight: bold;
 }
 
 .about-text {
     padding: 20px;
 }
 
-.about-text h3 {
-    font-size: 28px;
-    color: var(--logo4);
-    margin-bottom: 20px;
-}
-
 .about-text p {
+    font-size: 1.1rem;
     color: #f1f1f1;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     margin-bottom: 15px;
@@ -1199,7 +1198,7 @@ a {
 
 .micro-section {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    padding: 6rem 2rem;
+    padding: 6rem 2rem 2rem 2rem;
     color: white;
     text-align: center;
 }
@@ -1220,12 +1219,14 @@ a {
 }
 
 .explanation-section {
-    padding: 4rem 2rem;
+    padding: 1rem 2rem;
     border-radius: 15px;
 }
 
 .section-title {
+    text-align: center;
     color: var(--logo4);
+    font-size: 2rem;
 }
 
 .explanation-container {
@@ -1512,7 +1513,7 @@ a {
 
 .micro-solutions-section {
     color: white;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
 }
 
 .micro-solutions-section h2 {
