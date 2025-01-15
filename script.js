@@ -533,8 +533,8 @@ document.addEventListener('DOMContentLoaded', function () {
 const solutions = [
     {
         icon: "1",
-        title: "Mengurangi Penggunaan Plastik",
-        description: "Kurangi plastik sekali pakai dan beralihlah ke produk yang ramah lingkungan serta dapat digunakan kembali.",
+        title: "Mengurangi Wadah Makan Plastik",
+        description: "Kurangi wadah berbahan plastik sekali pakai dan beralihlah ke produk yang ramah lingkungan serta dapat digunakan kembali.",
     },
     {
         icon: "2",
@@ -565,6 +565,7 @@ class CustomSolutionCarousel {
         this.cardsContainer = document.querySelector(".custom-card-container");
         this.prevButton = document.querySelector(".custom-solution-prev-button");
         this.nextButton = document.querySelector(".custom-solution-next-button");
+        this.visibleCards = 5; // Number of visible cards in the stack
 
         if (!this.cardsContainer || !this.prevButton || !this.nextButton) {
             return;
@@ -582,20 +583,22 @@ class CustomSolutionCarousel {
         const card = document.createElement("div");
         card.className = "custom-card";
         card.innerHTML = `
-        <div class="custom-card-content">
-            <div class="custom-card-icon">${solution.icon}</div>
-            <div class="custom-card-text">
-                <h3>${solution.title}</h3>
-                <p>${solution.description}</p>
+            <div class="custom-card-content">
+                <div class="custom-card-icon">${solution.icon}</div>
+                <div class="custom-card-text">
+                    <h3>${solution.title}</h3>
+                    <p>${solution.description}</p>
+                </div>
             </div>
-        </div>
         `;
         return card;
     }
 
-    getCardPosition(index, total) {
-        if (index < 0) return total + index;
-        return index % total;
+    getCardIndex(baseIndex, offset) {
+        let index = baseIndex + offset;
+        while (index < 0) index += solutions.length;
+        while (index >= solutions.length) index -= solutions.length;
+        return index;
     }
 
     updateButtonState() {
@@ -609,8 +612,9 @@ class CustomSolutionCarousel {
         if (!this.cardsContainer) return;
 
         this.cardsContainer.innerHTML = "";
-        for (let i = 0; i < Math.min(5, solutions.length); i++) {
-            const index = this.getCardPosition(this.currentIndex + i, solutions.length);
+        // Create initial stack of cards
+        for (let i = 0; i < this.visibleCards; i++) {
+            const index = this.getCardIndex(this.currentIndex, i);
             const card = this.createCard(solutions[index]);
             card.className = `custom-card position-${i}`;
             this.cardsContainer.appendChild(card);
@@ -624,33 +628,65 @@ class CustomSolutionCarousel {
         this.isAnimating = true;
         this.updateButtonState();
 
-        const cards = this.cardsContainer.querySelectorAll(".custom-card");
-        const exitClass = direction === "next" ? "exit-right" : "exit-left";
+        // Update current index based on direction
+        if (direction === "next") {
+            this.currentIndex = this.getCardIndex(this.currentIndex, 1);
+        } else {
+            this.currentIndex = this.getCardIndex(this.currentIndex, -1);
+        }
 
-        cards[0].className = `custom-card ${exitClass}`;
+        const cards = Array.from(this.cardsContainer.querySelectorAll(".custom-card"));
+        
+        if (direction === "next") {
+            // Remove first card with exit animation
+            const exitingCard = cards[0];
+            exitingCard.className = "custom-card exit-left";
+            setTimeout(() => exitingCard.remove(), 600);
 
-        setTimeout(() => {
-            cards[0].remove();
+            // Shift remaining cards forward
+            setTimeout(() => {
+                cards.slice(1).forEach((card, i) => {
+                    card.className = `custom-card position-${i}`;
+                });
 
-            for (let i = 1; i < cards.length; i++) {
-                cards[i].className = `custom-card position-${i - 1}`;
-            }
+                // Add new card at the back
+                const newCardIndex = this.getCardIndex(this.currentIndex, this.visibleCards - 1);
+                const newCard = this.createCard(solutions[newCardIndex]);
+                newCard.className = "custom-card enter-back";
+                this.cardsContainer.appendChild(newCard);
 
-            const newIndex = this.getCardPosition(direction === "next" ? this.currentIndex + cards.length - 1 : this.currentIndex - 1, solutions.length);
+                // Trigger position animation
+                requestAnimationFrame(() => {
+                    newCard.className = `custom-card position-${this.visibleCards - 1}`;
+                });
+            }, 300);
+        } else {
+            // Remove last card with exit animation
+            const exitingCard = cards[cards.length - 1];
+            exitingCard.className = "custom-card exit-right";
+            setTimeout(() => exitingCard.remove(), 600);
 
-            const newCard = this.createCard(solutions[newIndex]);
+            // Add new card at the front
+            const newCardIndex = this.getCardIndex(this.currentIndex, 0);
+            const newCard = this.createCard(solutions[newCardIndex]);
             newCard.className = "custom-card enter-back";
-            this.cardsContainer.appendChild(newCard);
+            this.cardsContainer.insertBefore(newCard, this.cardsContainer.firstChild);
 
-            requestAnimationFrame(() => {
-                newCard.className = `custom-card position-${cards.length - 1}`;
-            });
-        }, 300);
+            // Shift all cards back
+            setTimeout(() => {
+                const updatedCards = Array.from(this.cardsContainer.querySelectorAll(".custom-card"));
+                updatedCards.forEach((card, i) => {
+                    if (i < this.visibleCards) {
+                        card.className = `custom-card position-${i}`;
+                    }
+                });
+            }, 50);
+        }
 
+        // Reset animation state
         setTimeout(() => {
             this.isAnimating = false;
             this.updateButtonState();
-            this.currentIndex = this.getCardPosition(direction === "next" ? this.currentIndex + 1 : this.currentIndex - 1, solutions.length);
         }, 600);
     }
 
@@ -660,22 +696,31 @@ class CustomSolutionCarousel {
             this.nextButton.addEventListener("click", () => this.animateCards("next"));
         }
 
+        // Keyboard navigation
         document.addEventListener("keydown", (e) => {
             if (e.key === "ArrowLeft") this.animateCards("prev");
             if (e.key === "ArrowRight") this.animateCards("next");
         });
 
+        // Touch navigation
         if (this.cardsContainer) {
             let touchStartX = 0;
+            let touchStartY = 0;
+            
             this.cardsContainer.addEventListener("touchstart", (e) => {
                 touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
             });
 
             this.cardsContainer.addEventListener("touchend", (e) => {
                 const touchEndX = e.changedTouches[0].clientX;
-                const diff = touchEndX - touchStartX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) this.animateCards("prev");
+                const touchEndY = e.changedTouches[0].clientY;
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+
+                // Only handle horizontal swipes (ignore vertical scrolling)
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    if (diffX > 0) this.animateCards("prev");
                     else this.animateCards("next");
                 }
             });
@@ -683,9 +728,8 @@ class CustomSolutionCarousel {
     }
 }
 
-// Initialize
+// Initialize the carousel
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM loaded, initializing CustomSolutionCarousel");
     new CustomSolutionCarousel();
 });
 
