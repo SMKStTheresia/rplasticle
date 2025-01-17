@@ -96,7 +96,7 @@ h2.card {
 
 .plastic-types {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
 }
@@ -428,4 +428,16 @@ h2.card {
     color: var(--color-text);
     background-color: var(--logo3);
     color: ghostwhite;
+}
+
+@media screen and (max-width: 768px) {
+    .plastic-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .plastic-types {
+        grid-template-columns: 1fr;
+    }
 }
