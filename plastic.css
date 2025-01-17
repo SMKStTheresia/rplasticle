@@ -112,31 +112,18 @@ h2.card {
 .plastic-type h3 {
     color: var(--color-text);
     transition: .3s ease;
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
 }
 
 .plastic-type p{
     color: var(--color-text2);
     transition: .3s ease;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
 }
 .plastic-type small{
     color: var(--color-text2);
     transition: .3s ease;
-    font-size: 0.75rem;
-}
-
-@media screen and (max-width: 480px) {
-    .plastic-type h3 {
-        font-size: 1.2rem;
-    }
-    
-    .plastic-type p{
-        font-size: 0.6rem;
-    }
-    .plastic-type small{
-        font-size: 0.5rem;
-    }
+    font-size: clamp(0.5rem, 1.5vw, 0.75rem);
 }
 .plastic-type:hover {
     transform: scale(1.05);
