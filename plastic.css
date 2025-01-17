@@ -96,9 +96,35 @@ h2.card {
 
 .plastic-types {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .plastic-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .plastic-type {
+        min-width: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .plastic-types {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .plastic-type {
+        width: 100%;
+        min-width: 100%;
+        margin: 0;
+    }
 }
 
 .plastic-type {
@@ -107,6 +133,9 @@ h2.card {
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .plastic-type h3 {
@@ -116,7 +145,7 @@ h2.card {
 }
 
 .plastic-type p{
-    color: var(--color-text2);
+    color: var(--color-text2);  
     transition: .3s ease;
     font-size: clamp(0.75rem, 2vw, 0.85rem);
 }
@@ -428,16 +457,4 @@ h2.card {
     color: var(--color-text);
     background-color: var(--logo3);
     color: ghostwhite;
-}
-
-@media screen and (max-width: 768px) {
-    .plastic-types {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .plastic-types {
-        grid-template-columns: 1fr;
-    }
 }
