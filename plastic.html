@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Rplasticle - tentang plastik</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<!-- FONT -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,23 +14,41 @@
 	</head>
 	<body id="top">
 		<!-- NAVBAR -->
-    <nav id="navbar2">
-		<div class="nav-content">
-			<div class="logo headerNav">
-				<a href="index.html" target="_self">
-					<img src="gambar/logoRPlasticle.png" alt="Logo" />
-				</a>
+		<nav id="navbar2">
+			<div class="nav-content">
+				<div class="logo headerNav">
+					<a href="index.html" target="_self">
+						<img src="gambar/logoRPlasticle.png" alt="Logo" />
+					</a>
+				</div>
+				<ul class="nav-links" id="nav-links">
+					<li><a href="index.html#home">Kembali</a></li>
+				</ul>
+				<div class="hamburger" id="hamburger" aria-label="Hamburger Menu">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+				<script>
+					const hamburger = document.getElementById("hamburger");
+					const navLinks = document.getElementById("nav-links");
+					hamburger.addEventListener("click", () => {
+						const navLinks = document.getElementById("nav-links");
+						if (navLinks.style.display === "flex") {
+							navLinks.style.display = "none";
+						} else {
+							navLinks.style.display = "flex";
+							navLinks.style.flexDirection = "column";
+						}
+					});
+
+					document.querySelector(".hamburger").addEventListener("click", function () {
+						this.classList.toggle("active");
+						document.querySelector(".nav-links").classList.toggle("active");
+					});
+				</script>
 			</div>
-			<ul class="nav-links" id="nav-links">
-				<li><a href="index.html#home">Kembali</a></li>
-			</ul>
-			<div class="hamburger" id="hamburger" aria-label="Hamburger Menu">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-		</div>
-	</nav>
+		</nav>
 		<div class="container">
 			<h1>Mengenal Plastik</h1>
 
