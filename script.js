@@ -3,24 +3,129 @@
 document.body.style.background = 'linear-gradient(180deg, #006994 0%, #003366 100%)';
 const darkModeToggle = document.getElementById('theme-toggle');
 
-// THEME CHANGER
+// Create a single instance of ThemeManager that can be used across the app
+let themeManagerInstance = null;
+
 class ThemeManager {
     constructor() {
+        // Singleton pattern
+        if (themeManagerInstance) {
+            return themeManagerInstance;
+        }
+        themeManagerInstance = this;
+
         this.body = document.body;
         this.themeToggle = document.getElementById('theme-toggle');
+        this.navLinks = document.getElementById('nav-links');
+        this.hamburger = document.querySelector('.hamburger');
         this.isNightTheme = false;
         this.stars = [];
+        
         this.init();
+        this.initNavbar();
     }
 
     init() {
-        this.themeToggle.addEventListener('click', () => this.toggleTheme());
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        this.isNightTheme = savedTheme === 'night';
+        
+        // Apply saved theme immediately
+        if (this.isNightTheme) {
+            this.body.classList.add('night-theme');
+            this.body.classList.remove('day-theme');
+        } else {
+            this.body.classList.add('day-theme');
+            this.body.classList.remove('night-theme');
+        }
+
+        // Apply initial styles
+        this.updateWaveColors();
+        this.updateBackgroundColor();
         this.createStars();
         this.initShootingStars();
+
+        // Add theme toggle listener
+        if (this.themeToggle) {
+            this.themeToggle.addEventListener('click', () => this.toggleTheme());
+        }
+
+        // Add resize listener
+        window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    initNavbar() {
+        if (!this.navLinks || !this.hamburger) return;
+
+        // Initial navbar setup
+        this.handleMenuDisplay();
+
+        // Hamburger click handler
+        this.hamburger.addEventListener('click', () => {
+            this.hamburger.classList.toggle('active');
+            this.navLinks.classList.toggle('active');
+            
+            if (window.innerWidth <= 768) {
+                this.navLinks.style.display = 
+                    this.navLinks.style.display === 'flex' ? 'none' : 'flex';
+                this.navLinks.style.flexDirection = 'column';
+            }
+        });
+
+        // Setup smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = anchor.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Close mobile menu if open
+                    if (window.innerWidth <= 768) {
+                        this.navLinks.style.display = 'none';
+                        this.hamburger.classList.remove('active');
+                        this.navLinks.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Active link handling
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.href === window.location.href) {
+                link.classList.add('active');
+            }
+
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.nav-links a').forEach(l => 
+                    l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    }
+
+    handleMenuDisplay() {
+        if (!this.navLinks) return;
+        
+        if (window.innerWidth > 768) {
+            this.navLinks.style.display = 'flex';
+            this.navLinks.style.flexDirection = 'row';
+        } else {
+            this.navLinks.style.display = 'none';
+        }
+    }
+
+    handleResize() {
+        this.handleMenuDisplay();
+        this.updateWaveColors();
+        this.updateBackgroundColor();
     }
 
     toggleTheme() {
         this.isNightTheme = !this.isNightTheme;
+        localStorage.setItem('theme', this.isNightTheme ? 'night' : 'day');
 
         this.body.classList.toggle('night-theme');
         this.body.classList.toggle('day-theme');
@@ -29,12 +134,40 @@ class ThemeManager {
         this.updateBackgroundColor();
     }
 
+    updateBackgroundColor() {
+        const colors = this.isNightTheme ? {
+            body: 'linear-gradient(to bottom, #09192a, #000000)',
+            navbar: '#2a3441',
+            navLinks: '#000000',
+            footer: '#000000'
+        } : {
+            body: 'linear-gradient(180deg, #006994 0%, #003366 100%)',
+            navbar: '#d3f1ff',
+            navLinks: '#326ea2',
+            footer: '#153c66'
+        };
+
+        document.body.style.background = colors.body;
+        
+        const navbar = document.getElementById('navbar');
+        const headerNav = document.querySelector('.headerNav');
+        const navLinks = document.querySelector('.nav-links');
+        const footer = document.querySelector('.footer');
+        const landing = document.querySelector('.landing');
+
+        if (navbar) navbar.style.background = colors.navbar;
+        if (headerNav) headerNav.style.backgroundColor = 'transparent';
+        if (navLinks) navLinks.style.backgroundColor = colors.navLinks;
+        if (footer) footer.style.backgroundColor = colors.footer;
+        if (landing) {
+            landing.style.background = 
+                `linear-gradient(to top, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3))`;
+        }
+    }
+
     updateWaveColors() {
         const waves = document.querySelectorAll('.wave path');
-        const computedStyle = getComputedStyle(document.documentElement);
-
         waves.forEach((wave, index) => {
-            const waveColorVar = `--wave-color-${index + 1}`;
             let waveColor;
 
             if (this.isNightTheme) {
@@ -43,30 +176,13 @@ class ThemeManager {
                 if (index === 1) waveColor = '#152f47';
                 if (index === 2) waveColor = '#0c1f33';
             } else {
-                // Day theme colors
-                if (index === 0) waveColor = '#1b95c6';
-                if (index === 1) waveColor = '#1484b0';
-                if (index === 2) waveColor = '#006994';
+                // Day theme colors - use CONFIG values
+                waveColor = CONFIG.waves.colors[index];
             }
 
             wave.setAttribute('fill', waveColor);
+            wave.style.fill = waveColor;
         });
-    }
-
-    updateBackgroundColor() {
-        if (this.isNightTheme) {
-            document.body.style.background = 'linear-gradient(to bottom, #09192a, #000000)';
-            document.getElementById('navbar').style.background = '#2a3441';
-            document.querySelector('.headerNav').style.backgroundColor = 'transparent';
-            document.querySelector('.nav-links').style.backgroundColor = '#000000';
-            document.querySelector('.footer').style.backgroundColor = '#000000';
-        } else {
-            document.body.style.background = 'linear-gradient(180deg, #006994 0%, #003366 100%)';
-            document.getElementById('navbar').style.background = '#d3f1ff';
-            document.querySelector('.headerNav').style.backgroundColor = 'transparent';
-            document.querySelector('.nav-links').style.backgroundColor = '#326ea2';
-            document.querySelector('.footer').style.backgroundColor = '#153c66';
-        }
     }
 
     createStars() {
@@ -153,10 +269,16 @@ class WaveAnimation {
         this.container = container;
         this.waves = [];
         this.svgWidth = 1440;
+        this.themeManager = new ThemeManager(); // Will return the singleton instance
         this.init();
 
+        // Debounce resize handler
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            this.updateSVGCount();
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.updateSVGCount();
+            }, 250);
         });
     }
 
@@ -170,7 +292,9 @@ class WaveAnimation {
                 element: wave,
                 paths: [],
                 phase: i * Math.PI / 2,
-                color: CONFIG.waves.colors[i]
+                color: this.themeManager.isNightTheme ? 
+                    this.getNightColor(i) : 
+                    CONFIG.waves.colors[i]
             });
 
             this.container.appendChild(wave);
@@ -178,6 +302,11 @@ class WaveAnimation {
 
         this.updateSVGCount();
         this.animate();
+    }
+
+    getNightColor(index) {
+        const nightColors = ['#1e3d5a', '#152f47', '#0c1f33'];
+        return nightColors[index];
     }
 
     updateSVGCount() {
@@ -200,7 +329,13 @@ class WaveAnimation {
                 svg.style.width = `${this.svgWidth}px`;
 
                 const path = createSVGElement('path');
-                path.setAttribute('fill', wave.color);
+                // Use current theme color instead of wave.color
+                const color = this.themeManager.isNightTheme ? 
+                    this.getNightColor(this.waves.indexOf(wave)) : 
+                    CONFIG.waves.colors[this.waves.indexOf(wave)];
+                    
+                path.setAttribute('fill', color);
+                path.style.fill = color;
                 path.style.opacity = (1 - this.waves.indexOf(wave) * 0.2).toString();
 
                 svg.appendChild(path);
@@ -314,17 +449,29 @@ class ParallaxEffect {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    // Create the single ThemeManager instance
     const themeManager = new ThemeManager();
-
+    
     const wavesContainer = document.getElementById('waves-container');
     const trashContainer = document.getElementById('trash-container');
 
-    new WaveAnimation(wavesContainer);
-    new TrashGenerator(trashContainer);
+    // Initialize components
+    if (wavesContainer) {
+        const waveAnimation = new WaveAnimation(wavesContainer);
+    }
+    if (trashContainer) {
+        new TrashGenerator(trashContainer);
+    }
     new CloudGenerator();
     new ParallaxEffect();
 
     createBubblesInSections();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        themeManager.updateWaveColors();
+        themeManager.updateBackgroundColor();
+    });
 });
 
 //NAVBAR
