@@ -1,0 +1,303 @@
+@import "style.css";
+
+/* SOLUTIONS SECTION */
+.sol-page-section {
+    padding: 20px 20px 80px 20px;
+    perspective: 1000px;
+    overflow-x: hidden;
+}
+
+.sol-page-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.sol-page-header h2 {
+    font-size: 2.5rem;
+    color: var(--color-text);
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.sol-page-header p {
+    color: var(--color-text2);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.sol-page-kartu-con {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.sol-page-kartu {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sol-page-kartu:hover {
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.211);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.sol-page-kartu-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    padding-bottom: 60px;
+    
+}
+
+.sol-page-kartu-content h3 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}
+
+.sol-page-kartu-content p {
+    color: var(--color-text2);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex: 1;
+    word-wrap: break-word;
+}
+
+.sol-page-kartu-cta {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 48px);
+    margin: 0 24px;
+    padding: 12px 24px;
+    background: var(--color-primary);
+    color: var(--color-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.sol-page-kartu:hover .sol-page-kartu-cta {
+    bottom: 0;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sol-page-kartu-cta:hover {
+    background: var(--color-secondary);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Overlay Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark background */
+    z-index: 999; /* Below the modal */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000; /* Above the overlay */
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--modal-bg);
+    color: var(--modal-text);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-image-container {
+    position: relative;
+    margin: -30px -30px 20px -30px;
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.3));
+}
+
+.modal-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+}
+
+.modal-header {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    color: white;
+    z-index: 1;
+}
+
+.modal-header h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-text);
+    background: var(--color-secondary);
+    border: none;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.close-modal:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Pagination Styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.pagination-btn {
+  padding: 10px 20px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar2{
+    background-color: var(--modal-bg);
+}
+
+.pagination-btn:disabled {
+  background-color: var(--color-secondary);
+  cursor: not-allowed;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+}
+
+.page-selectors {
+  display: flex;
+  align-items: center;
+}
+
+.page-btn {
+  padding: 8px 12px;
+  margin: 0 5px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.page-btn.active {
+  background-color: var(--color-secondary);
+}
+
+.page-btn:hover:not(.active) {
+  background-color: var(--color-secondary);
+}
+
+.sol-page-kartu.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.sol-page-kartu.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+:root {
+    --website-bg-light: #f0f0f0; /* Example light mode website background color */
+    --modal-bg-dark: rgba(255, 255, 255, 0.1); /* Dark mode modal background color */
+}
+
+body.light-mode {
+    --modal-bg: var(--website-bg-light); /* Use website background color in light mode */
+}
+
+body.dark-mode {
+    --modal-bg: var(--modal-bg-dark); /* Use dark mode color */
+}
